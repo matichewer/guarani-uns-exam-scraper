@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import re
-
+import json
 import logging
 from logging.config import fileConfig
 from pathlib import Path
@@ -71,5 +71,5 @@ if __name__ == "__main__":
     dptos = getDptos(html_code)
     turnos = getTurnos(html_code)
 
-    mesas = getInfoMesa("CO", 7911, "2022-12|2022", cookie_code, csrf_code)
-    print(mesas['mesas'])
+    mesas = getInfoMesa("CO", 7911, "2024-07|2024", cookie_code, csrf_code)
+    print(json.dumps(mesas, indent=4))
