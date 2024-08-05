@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 import re
 import json
+
 import logging
 from logging.config import fileConfig
 from pathlib import Path
@@ -34,19 +35,33 @@ def getCSRFcode(html_code):
     log.info('CSRF: ' + csrf_code) 
     return csrf_code
 
+
 def getDptos(html_code):
-    dptos_array = []    
-    dptos_match = re.findall(r'>[A-Z\s]*<\\/opt', html_code)
+    dptos_dict = {}
 
-    for dpto in dptos_match:
-        dpto_search = re.search(r'>([^<\\/]+)<\\/opt', dpto)
-        if dpto_search:
-            dptos_array.append(dpto_search.group(1))
+    # Extraer el contenido del script
+    script_content = re.search(r'kernel\.renderer\.on_arrival\((.*?)\);', html_code, re.DOTALL)
 
-    log.info('Cantidad de Dptos: ' + str(len(dptos_array)))
-    log.info('Dptos del Guarani: ' + str(dptos_array))
+    if script_content:
+        # Parsear el JSON
+        try:
+            data = json.loads(script_content.group(1))
+            html_content = data.get('content', '')
 
-    return dptos_array
+            # Buscar las opciones de departamentos en el HTML extraído
+            options = re.findall(r'<option value="([A-Z]{2})">([^<]+)</option>', html_content)
+
+            for abbr, name in options:
+                if name != "-- Seleccione un Departamento Académico --":
+                    dptos_dict[abbr] = name.strip()
+
+        except json.JSONDecodeError:
+            log.error("Error al decodificar JSON")
+
+    log.info(f'Cantidad de Dptos: {len(dptos_dict)}')
+    log.info(f'Dptos del Guarani: {dptos_dict}')
+
+    return dptos_dict
 
 def getTurnos(html_code):    
     turnos_array = re.findall(r'[0-9]{4}-[0-9]{2}\|[0-9]{4}', html_code)
@@ -71,5 +86,5 @@ if __name__ == "__main__":
     dptos = getDptos(html_code)
     turnos = getTurnos(html_code)
 
-    mesas = getInfoMesa("CO", 7911, "2024-07|2024", cookie_code, csrf_code)
-    print(json.dumps(mesas, indent=4))
+    mesas = getInfoMesa("CO", 5523, "2024-08|2024", cookie_code, csrf_code)
+    print(json.dumps(mesas['mesas'], indent=4))
