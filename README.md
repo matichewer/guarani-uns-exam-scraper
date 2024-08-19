@@ -1,4 +1,4 @@
-# UNS Exam Scraper
+# Guaraní UNS Exam Scraper
 
 This project is a Python script designed to get final exam information from Guaraní system of Universidad Nacional del Sur (UNS).
 
