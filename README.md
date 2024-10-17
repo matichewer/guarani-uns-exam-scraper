@@ -9,5 +9,5 @@ This project is a Python script designed to get final exam information from Guar
 - Extracts CSRF token for secure requests.
 - Fetches list of academic departments.
 - Retrieves available exam periods.
-- Allows querying exam schedules for specific departments, subjects, and periods.
+- Allows to make a request of exam schedules for specific departments, subjects, and periods.
 
