@@ -1,0 +1,8 @@
+services:
+  sync-turnos:
+    build: .
+    container_name: sync-turnos
+    restart: unless-stopped
+    environment:
+      - TZ=America/Argentina/Buenos_Aires
+      - SYNC_INTERVAL_HOURS=1

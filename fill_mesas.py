@@ -1,4 +1,4 @@
-from guarani import getHTMLandCookie, getCSRFcode, GuaraniDB, fetch_and_insert_all_mesas, getDptos
+from src.guarani import getHTMLandCookie, getCSRFcode, GuaraniDB, fetch_and_insert_all_mesas, getDptos
 
 def main():
     html_code, cookie_code = getHTMLandCookie()
